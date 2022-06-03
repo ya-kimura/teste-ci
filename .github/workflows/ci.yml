@@ -1,9 +1,6 @@
-name: Pull request workflow
+name: Deploy test
 on:
   push:
-    branches:
-      - "main"
-  pull_request:
     branches:
       - "main"
 
@@ -21,7 +18,7 @@ jobs:
         echo "::set-output name=folders::$content"
     outputs:
       folders: ${{ steps.folders.outputs.folders }}
-  
+
   kubeval-lint: 
      runs-on: ubuntu-20.04
      needs: foldersChanged
@@ -43,7 +40,6 @@ jobs:
            echo "Run kubeval"
            cd ${{ matrix.folders }}
            kubeval all --strict --ignore-missing-schemas
-          
   commitLint:
     runs-on: ubuntu-20.04
     needs: [kubeval-lint]
